@@ -1,58 +1,67 @@
-let campContainer = document.getElementById("container");
+const start = document.getElementById("start");
 
-let numberOfBox = 100;
+start.addEventListener("click", gameBegin);
 
-const usedNumbers = []
+function gameBegin() {
 
-for(let i = 0; i < numberOfBox; i++){
+    const gameDifficulty =  (document.getElementById("difficulty").value);
 
-    const numeroBox = casualNumber(1,100)
-    const squareBox = addSquareBox(numeroBox)
+    console.log(gameDifficulty);
 
-    squareBox.addEventListener("click" ,
-        function(){
-            this.classList.toggle("click")
-        })
+    let totalBox;
+    let boxLineNumber;
 
-    campContainer.append(squareBox);
-}
+    switch(gameDifficulty) {
+        case easy:
+            default:
+            totalBox = 100;
+            console.log(easy);
+            break;
 
-function casualNumber (min,max){
-    let number = Math.floor(Math.random() * ( max - min + 1)) + min;
-    console.log(number);
-    return number;
-}
+        case medium:
+            totalBox = 81;
+            console.log(medium);
+            break;
 
-function addSquareBox (numero){
-    
-    let box = document.createElement("div")
-    box.classList.add("squareBox")
-
-    if (numero % 2 == 0){
-        box.classList.add("pari")
-    }
-    else{
-        box.classList.add("dispari")
+        case hard:
+            totalBox = 64;
+            console.log(hard);
+            break;
     }
 
+    boxLineNumber = Math.sqrt(totalBox);
+}
+
+
+createMineField();
+
+function createMineField() {
+
+    const container = document.getElementById("container");
+
+    container.innerHTML = "";
+
+    for (let i = 1; i <= totalBox; i++) {
+
+        const box = squareBoxFunc(i, boxLineNumber)
+
+        box.addEventListener("click", 
+            function() {
+                console.log(i);
+                console.log(this.innerText)
+                this.classList.toggle("click")
+            });
+
+            container.append(box);
+    }
+}
+
+function squareBoxFunc(numero, boxLineNumber) {
+    const box = document.createElement("div");
+    box.style.width = `calc(100% / ${boxLineNumber})`;
+    box.style.height = `calc(100% / ${boxLineNumber})`;
+    box.classList.add("squareBox");
     box.append(numero);
+
     return box;
-}
-
-function noDoubleNumber (usedNumbers, min, max) {
-
-    let noDoubleNumber = false;
-
-    let createCasualNumber;
-
-    while ( noDoubleNumber == false){
-        createCasualNumber = casualNumber(min, max);
-
-        if(usedNumbers.includes(createCasualNumber) == false){
-            noDoubleNumber == true;
-        }
-    }
-
-    return createCasualNumber;
-    
 }
